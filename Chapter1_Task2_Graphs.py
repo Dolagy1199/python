@@ -91,7 +91,13 @@ G.degree('a')
 
 
 def get_leaves(G):
-    G = nx.Graph()
+   listWithOneDegree=[]
+   for node in G.nodes:
+       if(G.degree(node) == 1):
+           listWithOneDegree.append(node)
+   return listWithOneDegree
+
+G = nx.Graph()
 G.add_edges_from([
         ('a', 'b'),
         ('a', 'd'),
@@ -126,11 +132,11 @@ nx.draw(G, with_labels=True, font_color='white', node_size=1000)
 
 
 
-print(open('../datasets/friends.adjlist').read())
+print(open('./friends.adjlist').read())
 
 
 
-SG = nx.read_adjlist('../datasets/friends.adjlist')
+SG = nx.read_adjlist('./friends.adjlist')
 
 
 nx.draw(SG, node_size=2000, node_color='lightblue', with_labels=True)
@@ -143,14 +149,30 @@ SG.degree('Alice')
 #EXERCISE 2
 
 def max_degree(G):
-    SG = nx.read_adjlist('../datasets/friends.adjlist')
+    friendName = ""
+    maxDegree = -1
+    for node in G.nodes:
+        if(G.degree(node) >= maxDegree):
+            maxDegree = G.degree(node)
+            friendName = node
+    return (friendName,maxDegree)
+SG = nx.read_adjlist('./friends.adjlist')
 assert max_degree(SG) == ('Claire', 4)
 
 
 #EXERCISE 3
 
 def mutual_friends(G, node_1, node_2):
-           SG = nx.read_adjlist('../datasets/friends.adjlist')
+    friendNode1 = list(G.neighbors(node_1))
+    friendNode2 = list(G.neighbors(node_2))
+    listCommonFriend=[]
+    for friend1 in friendNode1:
+        for friend2 in friendNode2:
+            if(friend1 == friend2):
+                listCommonFriend.append(friend1)
+                break
+    return listCommonFriend
+SG = nx.read_adjlist('./friends.adjlist')
 assert mutual_friends(SG, 'Alice', 'Claire') == ['Frank']
 assert mutual_friends(SG, 'George', 'Bob') == []
 assert sorted(mutual_friends(SG, 'Claire', 'George')) == ['Dennis', 'Frank']
@@ -174,48 +196,7 @@ D.has_edge(2,1)
 
 print('Successors of 2:', list(D.successors(2)))
 
-print('Predecessors of 2:', list(D.predecessors(2))
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+print('Predecessors of 2:', list(D.predecessors(2)))
 
 
 
